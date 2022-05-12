@@ -1,10 +1,85 @@
 ﻿IList<string> words = new List<string>();
 
-void importFile()
+void ImportFile()
 {
     // Read the all text in file
-    string text = System.IO.File.ReadAllText("./Words.txt");
-    Console.WriteLine(text);
+    foreach (string line in System.IO.File.ReadLines("./Words.txt"))
+    {
+        words.Add(line);
+        // Console.WriteLine(line);
+    }
+}
+
+IList<string> BubbleSort(IList<string> words)
+{
+    IList<string> result = new List<string>();
+    for (int p = 0; p <= words.Count - 2; p++)
+    {
+        for (int i = 0; i <= words.Count - 2; i++)
+        {
+            if (words[i].CompareTo(words[i + 1]) > 0)
+            {
+                string temp = words[i + 1];
+                words[i + 1] = words[i];
+                words[i] = temp;
+            }
+        }
+    }
+    return result;
+}
+
+IList<string> LINQOrLambdaSort(IList<string> words)
+{
+    IList<string> result = new List<string>();
+    for (int p = 0; p <= words.Count - 2; p++)
+    {
+        for (int i = 0; i <= words.Count - 2; i++)
+        {
+            if (words[i].CompareTo(words[i + 1]) > 0)
+            {
+                string temp = words[i + 1];
+                words[i + 1] = words[i];
+                words[i] = temp;
+            }
+        }
+    }
+    return result;
+}
+
+void CountDistinctWords(IList<string> words)
+{
+    Console.WriteLine(words.Distinct().ToList().Count);
+}
+
+void TakeTheFirstSomeWords(int takeNum, IList<string> words)
+{
+    for (int i = 0; i < takeNum; i++)
+    {
+        Console.WriteLine(words[i]);
+    }
+}
+
+void DisplayWordsAndCountStartWithLetter(char startLetter, IList<string> words)
+{
+    int count = 0;
+    IList<string> filteredWordList = new List<string>();
+    for (int i = 0; i < words.Count; i++)
+    {
+        if (words[i][0] == startLetter)
+        {
+            count++;
+            filteredWordList.Add(words[i]);
+        }
+    }
+
+    // Display total count
+    Console.WriteLine($"The {count} words that start with 'j' are:");
+
+    for (int i = 0; i < filteredWordList.Count; i++)
+    {
+        Console.WriteLine(filteredWordList[i]);
+
+    }
 }
 
 while (true)
@@ -24,12 +99,38 @@ while (true)
     Console.WriteLine("Select an option:");
 
     // Readline number
-    string keyword = Console.ReadLine();
+    string? keyword = Console.ReadLine().ToLower();
 
     switch (keyword) {
         case "1":
             {
-                importFile();
+                ImportFile();
+                break;
+            }
+        case "2":
+            {
+                BubbleSort(words);
+                break;
+            
+            }
+        case "3":
+            {
+                LINQOrLambdaSort(words);
+                break;
+            }
+        case "4":
+            {
+                CountDistinctWords(words);
+                break;
+            }
+        case "5":
+            {
+                TakeTheFirstSomeWords(10, words);
+                break;
+            }
+        case "6":
+            {
+                DisplayWordsAndCountStartWithLetter('j', words);
                 break;
             }
         case "x":
