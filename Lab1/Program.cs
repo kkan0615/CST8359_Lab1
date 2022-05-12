@@ -1,18 +1,22 @@
-﻿IList<string> words = new List<string>();
+﻿IList<string> wordList = new List<string>();
 
 void ImportFile()
 {
     // Read the all text in file
     foreach (string line in System.IO.File.ReadLines("./Words.txt"))
     {
-        words.Add(line);
-        // Console.WriteLine(line);
+        wordList.Add(line);
     }
+
+    Console.WriteLine($"The number of words is {wordList.Count}");
 }
 
 IList<string> BubbleSort(IList<string> words)
 {
+    var watch = new System.Diagnostics.Stopwatch();
     IList<string> result = new List<string>();
+
+    watch.Start();
     for (int p = 0; p <= words.Count - 2; p++)
     {
         for (int i = 0; i <= words.Count - 2; i++)
@@ -25,12 +29,17 @@ IList<string> BubbleSort(IList<string> words)
             }
         }
     }
+    watch.Stop();
+    Console.WriteLine($"Execution Time: {watch.ElapsedMilliseconds} ms");
     return result;
 }
 
 IList<string> LINQOrLambdaSort(IList<string> words)
 {
+    var watch = new System.Diagnostics.Stopwatch();
     IList<string> result = new List<string>();
+
+    watch.Start();
     for (int p = 0; p <= words.Count - 2; p++)
     {
         for (int i = 0; i <= words.Count - 2; i++)
@@ -43,12 +52,15 @@ IList<string> LINQOrLambdaSort(IList<string> words)
             }
         }
     }
+    watch.Stop();
+    Console.WriteLine($"Execution Time: {watch.ElapsedMilliseconds} ms");
+
     return result;
 }
 
 void CountDistinctWords(IList<string> words)
 {
-    Console.WriteLine(words.Distinct().ToList().Count);
+    Console.WriteLine($"Distinct count is {words.Distinct().ToList().Count}");
 }
 
 void TakeTheFirstSomeWords(int takeNum, IList<string> words)
@@ -59,13 +71,16 @@ void TakeTheFirstSomeWords(int takeNum, IList<string> words)
     }
 }
 
-void DisplayWordsAndCountStartWithLetter(char startLetter, IList<string> words)
+void DisplayWordsAndCountStartWithLetter(char letter, IList<string> words)
 {
     int count = 0;
     IList<string> filteredWordList = new List<string>();
+
     for (int i = 0; i < words.Count; i++)
     {
-        if (words[i][0] == startLetter)
+        string word = words[i];
+        // Check first letter
+        if (word[0] == letter)
         {
             count++;
             filteredWordList.Add(words[i]);
@@ -73,8 +88,8 @@ void DisplayWordsAndCountStartWithLetter(char startLetter, IList<string> words)
     }
 
     // Display total count
-    Console.WriteLine($"The {count} words that start with 'j' are:");
-
+    Console.WriteLine($"The {count} words that start with '{letter}' are:");
+    // Display the word
     for (int i = 0; i < filteredWordList.Count; i++)
     {
         Console.WriteLine(filteredWordList[i]);
@@ -82,8 +97,86 @@ void DisplayWordsAndCountStartWithLetter(char startLetter, IList<string> words)
     }
 }
 
+void DisplayWordsAndCountEndWithLetter(char letter, IList<string> words)
+{
+    int count = 0;
+    IList<string> filteredWordList = new List<string>();
+
+    for (int i = 0; i < words.Count; i++)
+    {
+        string word = words[i];
+        // Check last letter
+        if (word[word.Length - 1] == letter)
+        {
+            count++;
+            filteredWordList.Add(words[i]);
+        }
+    }
+
+    // Display total count
+    Console.WriteLine($"The {count} words that end with '{letter}' are:");
+    // Display the word
+    for (int i = 0; i < filteredWordList.Count; i++)
+    {
+        Console.WriteLine(filteredWordList[i]);
+
+    }
+}
+
+void DisplayWordsAndCountGreaterThanNum(int num, IList<string> words)
+{
+    int count = 0;
+    IList<string> filteredWordList = new List<string>();
+
+    for (int i = 0; i < words.Count; i++)
+    {
+        string word = words[i];
+        if (word.Length > num)
+        {
+            count++;
+            filteredWordList.Add(words[i]);
+        }
+    }
+
+    // Display total count
+    Console.WriteLine($"The {count} words that have more than {num} characters are:");
+    // Display the word
+    for (int i = 0; i < filteredWordList.Count; i++)
+    {
+        Console.WriteLine(filteredWordList[i]);
+
+    }
+}
+
+void DisplayWordsAndCountLessThanNumStartWithLetter(int num, char letter, IList<string> words)
+{
+    int count = 0;
+    IList<string> filteredWordList = new List<string>();
+
+    for (int i = 0; i < words.Count; i++)
+    {
+        string word = words[i];
+        if (word.Length < num && word[0] == letter)
+        {
+            count++;
+            filteredWordList.Add(words[i]);
+        }
+    }
+
+    // Display total count
+    Console.WriteLine($"The {count} words that have less than {num} characters are:");
+    // Display the word
+    for (int i = 0; i < filteredWordList.Count; i++)
+    {
+        Console.WriteLine(filteredWordList[i]);
+
+    }
+}
+
+/* Loop untill system exit */
 while (true)
 {
+    /* Menu list */
     Console.WriteLine("Choose an option:");
     Console.WriteLine("1 - Import Words from File");
     Console.WriteLine("2 - Bubble Sort words");
@@ -96,12 +189,12 @@ while (true)
     Console.WriteLine("9 - Get and display words that are less than 3 characters long and start with the letter 'a', and display the count");
     Console.WriteLine("x – Exit");
     Console.WriteLine("\n");
-    Console.WriteLine("Select an option:");
+    Console.Write("Select an option: ");
 
-    // Readline number
-    string? keyword = Console.ReadLine().ToLower();
+    // Readline keyword
+    string keyword = Console.ReadLine() ?? "";
 
-    switch (keyword) {
+    switch (keyword.ToLower()) {
         case "1":
             {
                 ImportFile();
@@ -109,28 +202,43 @@ while (true)
             }
         case "2":
             {
-                BubbleSort(words);
+                BubbleSort(wordList);
                 break;
             
             }
         case "3":
             {
-                LINQOrLambdaSort(words);
+                LINQOrLambdaSort(wordList);
                 break;
             }
         case "4":
             {
-                CountDistinctWords(words);
+                CountDistinctWords(wordList);
                 break;
             }
         case "5":
             {
-                TakeTheFirstSomeWords(10, words);
+                TakeTheFirstSomeWords(10, wordList);
                 break;
             }
         case "6":
             {
-                DisplayWordsAndCountStartWithLetter('j', words);
+                DisplayWordsAndCountStartWithLetter('j', wordList);
+                break;
+            }
+        case "7":
+            {
+                DisplayWordsAndCountEndWithLetter('d', wordList);
+                break;
+            }
+        case "8":
+            {
+                DisplayWordsAndCountGreaterThanNum(4, wordList);
+                break;
+            }
+        case "9":
+            {
+                DisplayWordsAndCountLessThanNumStartWithLetter(3, 'a', wordList);
                 break;
             }
         case "x":
@@ -140,7 +248,7 @@ while (true)
             }
         default:
             {
-                // just break the line Lab1.exe
+                // just break
                 break;
             }
     }
