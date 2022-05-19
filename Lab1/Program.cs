@@ -2,30 +2,43 @@
 
 void ImportFile()
 {
-    // Read the all text in file
-    foreach (string line in System.IO.File.ReadLines("./Words.txt"))
+    try
     {
-        wordList.Add(line);
-    }
+        // Read the all text in file
+        foreach (string line in System.IO.File.ReadLines("./Words.txt"))
+        {
+            wordList.Add(line);
+        }
 
-    Console.WriteLine($"The number of words is {wordList.Count}");
+    }
+    catch 
+    {
+        // Environment.CurrentDirectory
+
+        Console.WriteLine("Could not find file at:" + System.IO.Directory.GetCurrentDirectory() + "\\Words.txt");
+        // Console.WriteLine($"Could not find file at: {Directory.GetParent(Environment.CurrentDirectory)?.FullName}Words.txt");
+    }
+    finally
+    {
+        Console.WriteLine($"The number of words is {wordList.Count}");
+    }
 }
 
 IList<string> BubbleSort(IList<string> words)
 {
     var watch = new System.Diagnostics.Stopwatch();
-    IList<string> result = new List<string>();
+    IList<string> result = new List<string>(words);
 
     watch.Start();
-    for (int p = 0; p <= words.Count - 2; p++)
+    for (int p = 0; p <= result.Count - 2; p++)
     {
-        for (int i = 0; i <= words.Count - 2; i++)
+        for (int i = 0; i <= result.Count - 2; i++)
         {
-            if (words[i].CompareTo(words[i + 1]) > 0)
+            if (result[i].CompareTo(result[i + 1]) > 0)
             {
-                string temp = words[i + 1];
-                words[i + 1] = words[i];
-                words[i] = temp;
+                string temp = result[i + 1];
+                result[i + 1] = result[i];
+                result[i] = temp;
             }
         }
     }
@@ -37,21 +50,10 @@ IList<string> BubbleSort(IList<string> words)
 IList<string> LINQOrLambdaSort(IList<string> words)
 {
     var watch = new System.Diagnostics.Stopwatch();
-    IList<string> result = new List<string>();
+    IList<string> result = new List<string>(words);
 
     watch.Start();
-    for (int p = 0; p <= words.Count - 2; p++)
-    {
-        for (int i = 0; i <= words.Count - 2; i++)
-        {
-            if (words[i].CompareTo(words[i + 1]) > 0)
-            {
-                string temp = words[i + 1];
-                words[i + 1] = words[i];
-                words[i] = temp;
-            }
-        }
-    }
+    result = words.OrderBy(str => str).ToList();
     watch.Stop();
     Console.WriteLine($"Execution Time: {watch.ElapsedMilliseconds} ms");
 
