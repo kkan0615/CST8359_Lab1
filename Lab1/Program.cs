@@ -4,8 +4,12 @@ void ImportFile()
 {
     try
     {
+        // Reset the word list 
+        wordList = new List<string>();
         // Read the all text in file
-        foreach (string line in System.IO.File.ReadLines("./Words.txt"))
+        IEnumerable<string> lines = System.IO.File.ReadLines("./Words.txt");
+
+        foreach (string line in lines)
         {
             wordList.Add(line);
         }
@@ -13,10 +17,7 @@ void ImportFile()
     }
     catch 
     {
-        // Environment.CurrentDirectory
-
         Console.WriteLine("Could not find file at:" + System.IO.Directory.GetCurrentDirectory() + "\\Words.txt");
-        // Console.WriteLine($"Could not find file at: {Directory.GetParent(Environment.CurrentDirectory)?.FullName}Words.txt");
     }
     finally
     {
@@ -245,6 +246,7 @@ while (true)
             }
         case "x":
             {
+                // Exit the program
                 Environment.Exit(0);
                 break;
             }
